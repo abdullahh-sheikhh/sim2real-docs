@@ -27,6 +27,9 @@ class Light:
 
     def set_light_energy(self):
         self.light_object.data.energy = self.light_configs.light_energies
+        # Set AREA light size for soft indoor-lamp shadows (default 0.25m is bare-bulb hard)
+        if self.light_object.data.type == "AREA":
+            self.light_object.data.size = 1.2
 
     def set_light_color(self):
         """
@@ -42,6 +45,7 @@ class Light:
             self.light_configs.color_saturation,
             self.light_configs.color_value,
         )
-        bpy.context.object.color = (color_object.r, color_object.g, color_object.b, 1.0)
+        # BUGFIX: Object.color is viewport display only; Light.color is the actual emission color
+        self.light_object.data.color = (color_object.r, color_object.g, color_object.b)
         bpy.ops.object.select_all(action="DESELECT")
         return color_object

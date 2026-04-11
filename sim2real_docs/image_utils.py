@@ -19,7 +19,7 @@ class Image:
         self.create_an_image()
         self.image_name_in_collection = self.get_image_name()
         self.image_object = self.get_object()
-        self.image_object.location[2] = 0.05
+        self.image_object.location[2] = 0.25
 
     def get_object(self):
         """

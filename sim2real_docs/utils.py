@@ -57,7 +57,11 @@ def render_scene(save_path: str, image_name: str, camera_name: str):
     """
     bpy.ops.object.select_all(action="DESELECT")
     bpy.data.objects[camera_name].select_set(True)
-    bpy.context.scene.render.filepath = os.path.join(save_path, image_name)
+    # IMPROVEMENT output as 16bit TIFF for lossless high quality renders suitable for publication
+    bpy.context.scene.render.image_settings.file_format = "TIFF"
+    bpy.context.scene.render.image_settings.color_depth = "16"
+    output_name = os.path.splitext(image_name)[0] + ".tiff"
+    bpy.context.scene.render.filepath = os.path.join(save_path, output_name)
     bpy.ops.render.render(write_still=True)
 
 

@@ -32,6 +32,8 @@ def run_scene_settings(scene_variation: namedtuple):
     scene_object.set_aspect_ratio()
     scene_object.set_contrast()
     scene_object.set_scene_crop()
+    scene_object.set_exposure()
+    scene_object.set_surface_background()
     return scene_object
 
 

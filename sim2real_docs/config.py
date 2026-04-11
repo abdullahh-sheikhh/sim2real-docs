@@ -12,6 +12,7 @@ from .create_random_values import (
     get_scene_parameters,
     get_other_blender_parameters,
     get_image_parameters,
+    validate_and_resample_geometry,
     Scene_tuple,
     Camera_tuple,
     Light_tuple,
@@ -141,6 +142,14 @@ def get_variations(n_variations: int, config: dict, image_files: list, bg_list: 
         image_files,
         bg_list,
     )
+    # DISABLED: validate_and_resample_geometry used wrong sensor-axis math (sensor_half_w=18mm
+    # for portrait resolutions instead of Blender's actual 16.875mm), ignored image X/Y rotation,
+    # and ran before the Blender scene existed. Replaced by _fix_camera_z_for_frame in render_docs.py
+    # which uses world_to_camera_view as ground truth after the scene is set up.
+    # camera_params, image_params = validate_and_resample_geometry(
+    #     camera_params, image_params, scene_params,
+    #     config["camera_configs"], config["image_configs"]
+    # )
     return scene_params, light_params, camera_params, other_blender_params, image_params
 
 

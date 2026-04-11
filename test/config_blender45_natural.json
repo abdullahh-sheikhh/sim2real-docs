@@ -1,0 +1,56 @@
+{
+    "light_configs": {
+        "light_x_location": {"range": [-1.5, 1.5]},
+        "light_y_location": {"range": [-1.5, 1.5]},
+        "light_z_location": {"range": [2.0, 4.0]},
+        "light_energy": {"range": [20, 60]},
+        "light_types": {"range": ["AREA"], "weights": [1]},
+        "hue": {"range": [0.0, 0.65]},
+        "saturation": {"range": [0.0, 0.35]},
+        "value": {"range": [0.75, 1.0]}
+    },
+    "camera_configs": {
+        "camera_x_location": {"range": [0, 0]},
+        "camera_y_location": {"range": [0, 0]},
+        "camera_z_location": {"range": [1.5, 2.5]},
+        "camera_x_rotation": {"range": [5, 30]},
+        "camera_y_rotation": {"range": [0, 0]},
+        "camera_z_rotation": {"range": [0, 360]},
+        "camera_focal_length": {"range": [40, 65]}
+    },
+    "scene_configs": {
+        "exposure": {"range": [0.0, 0.3]},
+        "contrast": {
+            "range": [
+                "AgX - Low Contrast",
+                "AgX - Medium Low Contrast",
+                "AgX - Base Contrast",
+                "AgX - Medium High Contrast",
+                "AgX - High Contrast",
+                "AgX - Very High Contrast"
+            ],
+            "weights": [1, 1, 2, 2, 1, 1]
+        },
+        "crop_min_x": {"range": [0, 0]},
+        "crop_max_x": {"range": [1, 1]},
+        "crop_min_y": {"range": [0, 0]},
+        "crop_max_y": {"range": [1, 1]},
+        "resolution_percentage": {"range": [50, 75]},
+        "aspect_ratio": {
+            "range": [[1, 1]],
+            "weights": [1]
+        },
+        "resolution": {"range": [[960, 1024]], "weights": [1]},
+        "color_modes": {"range": ["RGB"], "weights": [1]},
+        "render_engine": {"range": ["CYCLES"], "weights": [1]}
+    },
+    "image_configs": {
+        "image_x_scale": {"range": [1.2, 1.6]},
+        "image_y_scale": {"range": [1.2, 1.6]},
+        "image_z_scale": {"range": [1, 1]},
+        "image_x_rotation": {"range": [-10, 10]},
+        "image_y_rotation": {"range": [-8, 8]},
+        "image_z_rotation": {"range": [-20, 20]}
+    },
+    "others": {"render_device_type": "CPU"}
+}

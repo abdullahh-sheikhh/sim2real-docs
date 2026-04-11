@@ -2,6 +2,120 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)[![code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+---
+
+# Quick Start Guide (Windows + Blender 4.5)
+
+This section covers the exact steps to run the pipeline in this repository on Windows with Blender 4.5.
+
+## Prerequisites
+
+- **Blender 4.5** installed at `C:\Program Files\Blender Foundation\Blender 4.5\`
+- **Python 3.x** (only needed to install the package into Blender's Python)
+- Repository cloned to a local path (e.g. `D:\Sorbonne M1\IG3D\Project\sim2real-docs`)
+
+## Step 1 — Install the package into Blender's Python
+
+Blender ships with its own embedded Python. You must install `sim2real-docs` into **Blender's** Python, not your system Python.
+
+Open a terminal (Command Prompt or PowerShell) and run:
+
+```bat
+"C:\Program Files\Blender Foundation\Blender 4.5\blender.exe" --background --python install.py
+```
+
+Run this from inside the `sim2real-docs` directory. This installs the package into Blender's embedded Python environment.
+
+## Step 2 — Prepare your input images
+
+Place your document images (PNG, JPG, etc.) into an input folder. Example:
+
+```
+D:\Sorbonne M1\IG3D\Project\outputs\input_10\
+```
+
+Supported formats: `.jpg`, `.jpeg`, `.jp2`, `.png`, `.bmp`, `.tiff`, `.tif`
+
+## Step 3 — Create or choose a config file
+
+Config files are JSON and live in `test/`. Three configs are provided:
+
+| File | Purpose |
+|---|---|
+| `config_blender45.json` | Conservative defaults — tight camera, POINT light only |
+| `config_blender45_natural.json` | Wider randomization — lateral camera, AREA/SUN lights, document tilt |
+| `config_blender45_fast.json` | Fast preview config |
+
+To use the natural config (recommended), see `test/test_render.py` which already references it.
+
+## Step 4 — Edit test_render.py
+
+Open `test/test_render.py` and set your paths:
+
+```python
+import sys
+sys.path.insert(0, "D:/Sorbonne M1/IG3D/Project/blender_libs")  # path to blender_libs in this repo
+
+import bpy
+from sim2real_docs.render_docs import get_image_renderings
+
+# Set Cycles sample count (64 is fast; use 128+ for final quality)
+bpy.context.scene.cycles.samples = 64
+
+get_image_renderings(
+    input_path="D:/Sorbonne M1/IG3D/Project/outputs/input_10",   # folder with source documents
+    save_path="D:/Sorbonne M1/IG3D/Project/outputs/improved",    # where renders are saved
+    configs_path="D:/Sorbonne M1/IG3D/Project/test/config_blender45_natural.json"
+)
+```
+
+All paths must be **absolute** and use **forward slashes**.
+
+## Step 5 — Run the pipeline
+
+From any terminal:
+
+```bat
+"C:\Program Files\Blender Foundation\Blender 4.5\blender.exe" --background --python "D:\Sorbonne M1\IG3D\Project\test\test_render.py"
+```
+
+`--background` runs Blender headlessly (no GUI). The render will start and you will see progress in the terminal.
+
+## Step 6 — Check outputs
+
+After completion, your `save_path` folder will contain:
+- One rendered `.png` per input document
+- `metadata.json` — all randomization parameters used for each render (camera, light, crop, bounding boxes, etc.)
+
+Optionally add `seg_path` to `get_image_renderings()` to also generate segmentation masks.
+
+## Optional — Add background images
+
+To render documents on top of real photographs (tables, desks, etc.):
+
+```python
+get_image_renderings(
+    input_path="...",
+    save_path="...",
+    bg_images_path="D:/path/to/background/photos",  # folder of JPG/PNG photos
+    configs_path="..."
+)
+```
+
+The pipeline will randomly select one background photo per render and place it as a large plane behind the document.
+
+## Troubleshooting
+
+| Problem | Cause | Fix |
+|---|---|---|
+| `ModuleNotFoundError: sim2real_docs` | Package not installed in Blender's Python | Run `blender --background --python install.py` from the `sim2real-docs` directory |
+| Dark / black renders | Light Z position is negative (underground) | Ensure `light_z_location` range in your config has a positive minimum (e.g. `[1.5, 4]`) |
+| Documents appear tiny | Scale range too low or crop values too aggressive | Increase `image_x_scale`/`image_y_scale` minimum in config |
+| Bounding boxes go negative | Document is partially outside the rendered frame | Tighten crop ranges or increase document scale |
+| Very slow renders | Sample count too high | Set `bpy.context.scene.cycles.samples = 64` in your script |
+
+---
+
 # Introduction 
  Sim2Real Docs is a python framework for synthesizing datasets and performing domain randomization of documents in natural scenes. 
  It enables programmatic 3D rendering of documents using Blender, an open source tool for 3D modeling and ray-traced rendering.
