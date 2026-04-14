@@ -1,2 +1,31 @@
 # OSX Residuals
 *.DS_Store
+
+# Rendered outputs (large files, personal documents)
+outputs/
+
+# Sample templates (local only)
+samples/
+
+# Personal documents in test inputs
+test/pdf_input_images/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Blender temp files
+*.blend1
+
+# images
+*.png
+*.jpg
+*.jpeg
+*.bmp
+
+# files for documentation
+*.md
+*.pdf
+*.pptx
+*.docx
